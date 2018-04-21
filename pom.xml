@@ -7,13 +7,13 @@
         <artifactId>sonatype-parent</artifactId>
         <version>0.1</version>
     </parent>
-    <artifactId>java8-extras</artifactId>
+    <artifactId>commons-more</artifactId>
     <version>0.1-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <description>RxJava 2 utilities</description>
     <packaging>jar</packaging>
 
-    <url>http://github.com/davidmoten/java8-extras</url>
+    <url>http://github.com/davidmoten/commons-more</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -49,12 +49,12 @@
 
     <ciManagement>
         <system>Travis</system>
-        <url>https://travis-ci.org/davidmoten/java8-extras</url>
+        <url>https://travis-ci.org/davidmoten/commons-more</url>
     </ciManagement>
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/davidmoten/java8-extras/issues</url>
+        <url>https://github.com/davidmoten/commons-more/issues</url>
     </issueManagement>
 
     <inceptionYear>2018</inceptionYear>
@@ -72,9 +72,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:https://github.com/davidmoten/java8-extras.git</connection>
-        <developerConnection>scm:git:https://github.com/davidmoten/java8-extras.git</developerConnection>
-        <url>scm:git:https://github.com:davidmoten/java8-extras.git</url>
+        <connection>scm:git:https://github.com/davidmoten/commons-more.git</connection>
+        <developerConnection>scm:git:https://github.com/davidmoten/commons-more.git</developerConnection>
+        <url>scm:git:https://github.com:davidmoten/commons-more.git</url>
         <tag>0.7.1-RC6</tag>
     </scm>
 

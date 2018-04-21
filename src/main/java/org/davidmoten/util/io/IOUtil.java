@@ -20,7 +20,7 @@ public final class IOUtil {
         return new TransformedInputStream(is, transform, bufferSize);
     }
 
-    private static final class TransformedInputStream extends InputStream {
+    private static final class TransformedInputStream extends InputStream implements Runnable {
 
         private final InputStream is;
         private final Deque<ByteBuffer> queue;
@@ -92,12 +92,12 @@ public final class IOUtil {
         }
 
         public long skip(long n) throws IOException {
-            //TODO
+            // TODO
             return 0;
         }
 
         public int available() throws IOException {
-            //TODO
+            // TODO
             return 0;
         }
 
@@ -106,7 +106,7 @@ public final class IOUtil {
         }
 
         public void mark(int readlimit) {
-            is.mark(readlimit);
+            throw new UnsupportedOperationException();
         }
 
         public void reset() throws IOException {
@@ -114,7 +114,12 @@ public final class IOUtil {
         }
 
         public boolean markSupported() {
-            return is.markSupported();
+            return false;
+        }
+
+        @Override
+        public void run() {
+            closed = true;
         }
 
     }
@@ -144,7 +149,6 @@ public final class IOUtil {
 
         @Override
         public void close() throws IOException {
-            // TODO
         }
 
         @Override
