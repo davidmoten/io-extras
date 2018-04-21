@@ -1,5 +1,6 @@
 package org.davidmoten.util.io;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -7,7 +8,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Queue;
-import java.util.function.Function;
 
 public final class IOUtil {
 
@@ -15,9 +15,15 @@ public final class IOUtil {
         // prevent instantiation
     }
 
-    public static InputStream pipe(InputStream is, Function<OutputStream, OutputStream> transform,
-            int bufferSize) {
+    public static InputStream pipe(InputStream is,
+            FunctionCanThrow<OutputStream, OutputStream> transform, int bufferSize)
+            throws IOException {
         return new TransformedInputStream(is, transform, bufferSize);
+    }
+
+    public static InputStream pipe(ByteArrayInputStream is,
+            FunctionCanThrow<OutputStream, OutputStream> FunctionCanThrow) throws IOException {
+        return pipe(is, FunctionCanThrow, 8192);
     }
 
     private static final class TransformedInputStream extends InputStream implements Runnable {
@@ -29,8 +35,9 @@ public final class IOUtil {
         private boolean done;
         private boolean closed;
 
-        TransformedInputStream(InputStream is, Function<OutputStream, OutputStream> transform,
-                int bufferSize) {
+        TransformedInputStream(InputStream is,
+                FunctionCanThrow<OutputStream, OutputStream> transform, int bufferSize)
+                throws IOException {
             this.is = is;
             this.queue = new ArrayDeque<>();
             this.out = transform.apply(new QueuedOutputStream(queue));
