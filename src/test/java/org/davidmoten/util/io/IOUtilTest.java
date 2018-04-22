@@ -2,6 +2,7 @@ package org.davidmoten.util.io;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -22,54 +23,46 @@ public class IOUtilTest {
 
     @Test
     public void testRoundTripIdentity() throws IOException {
-        testRoundTripIdentity("hi there");
+        testRoundTripIdentity("hi there", 128, 128);
     }
 
     @Test
     public void testRoundTripIdentityWithSmallBuffers() throws IOException {
-        testRoundTripIdentityBuffered("hi there");
+        testRoundTripIdentity("hi there", 2, 3);
     }
-    
-    private void testRoundTripIdentity(String s) throws IOException {
-        ByteArrayInputStream a = new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
-        InputStream b = IOUtil.pipe(a, o -> o);
+
+    private void testRoundTripIdentity(String s, int bufferSizeLeft, int bufferSizeRight)
+            throws IOException {
+        InputStream a = new BufferedInputStream(
+                new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8)), bufferSizeLeft);
+        InputStream b = IOUtil.pipe(a, o -> o, bufferSizeRight);
         List<String> list = new BufferedReader(new InputStreamReader(b, StandardCharsets.UTF_8))
                 .lines().collect(Collectors.toList());
         assertEquals(s, list.get(0));
         assertEquals(1, list.size());
     }
 
-    private void testRoundTripIdentityBuffered(String s) throws IOException {
-        InputStream a = new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
-        InputStream b = IOUtil.pipe(a, o -> o, 2);
-        List<String> list = new BufferedReader(new InputStreamReader(b, StandardCharsets.UTF_8), 3)
-                .lines().collect(Collectors.toList());
-        assertEquals(s, list.get(0));
-        assertEquals(1, list.size());
-    }
-
-    
     @Test
     public void testRoundTripGzip() throws IOException {
-        testRoundTripGzip("hi there");
+        testRoundTripGzip("hi there", 128);
     }
 
     @Test
     public void testRoundTripGzipLong() throws IOException {
-        testRoundTripGzip(createLongString());
+        testRoundTripGzip(createLongString(), 2);
     }
 
     private static String createLongString() {
         StringWriter w = new StringWriter();
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 30; i++) {
             w.write(UUID.randomUUID().toString());
         }
         return w.toString();
     }
 
-    private void testRoundTripGzip(String s) throws IOException {
+    private void testRoundTripGzip(String s, int bufferSize) throws IOException {
         ByteArrayInputStream a = new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
-        InputStream b = IOUtil.pipe(a, o -> new GZIPOutputStream(o));
+        InputStream b = IOUtil.pipe(a, o -> new GZIPOutputStream(o), bufferSize);
         List<String> list = new BufferedReader(
                 new InputStreamReader(new GZIPInputStream(b), StandardCharsets.UTF_8)).lines()
                         .collect(Collectors.toList());
