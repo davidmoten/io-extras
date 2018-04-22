@@ -1,6 +1,5 @@
 package org.davidmoten.util.io;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -16,13 +15,14 @@ public final class IOUtil {
     }
 
     public static InputStream pipe(InputStream is,
-            FunctionCanThrow<OutputStream, OutputStream> transform, int bufferSize)
-            throws IOException {
+            FunctionCanThrow<? super OutputStream, ? extends OutputStream> transform,
+            int bufferSize) throws IOException {
         return new TransformedInputStream(is, transform, bufferSize);
     }
 
-    public static InputStream pipe(ByteArrayInputStream is,
-            FunctionCanThrow<OutputStream, OutputStream> FunctionCanThrow) throws IOException {
+    public static InputStream pipe(InputStream is,
+            FunctionCanThrow<? super OutputStream, ? extends OutputStream> FunctionCanThrow)
+            throws IOException {
         return pipe(is, FunctionCanThrow, 8192);
     }
 
@@ -36,7 +36,7 @@ public final class IOUtil {
         private boolean closed;
 
         TransformedInputStream(InputStream is,
-                FunctionCanThrow<OutputStream, OutputStream> transform, int bufferSize)
+                FunctionCanThrow<? super OutputStream, ? extends OutputStream> transform, int bufferSize)
                 throws IOException {
             this.is = is;
             this.queue = new ArrayDeque<>();
