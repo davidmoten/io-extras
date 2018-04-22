@@ -36,8 +36,8 @@ public final class IOUtil {
         private boolean closed;
 
         TransformedInputStream(InputStream is,
-                FunctionCanThrow<? super OutputStream, ? extends OutputStream> transform, int bufferSize)
-                throws IOException {
+                FunctionCanThrow<? super OutputStream, ? extends OutputStream> transform,
+                int bufferSize) throws IOException {
             this.is = is;
             this.queue = new ArrayDeque<>();
             this.out = transform.apply(new QueuedOutputStream(queue));
@@ -55,10 +55,12 @@ public final class IOUtil {
             }
         }
 
+        @Override
         public int read(byte[] b) throws IOException {
             return readInternal(b, 0, b.length);
         }
 
+        @Override
         public int read(byte[] b, int off, int len) throws IOException {
             return readInternal(b, off, len);
         }
@@ -84,41 +86,45 @@ public final class IOUtil {
                     }
                 } else {
                     int n = Math.min(bb.remaining(), length);
-                    if (n < bb.remaining()) {
-                        ByteBuffer bb2 = bb.duplicate();
-                        bb2.position(bb2.position() + n);
-                        queue.offerLast(bb2);
-                    }
                     if (bytes != null) {
                         bb.get(bytes, 0, n);
+                    }
+                    if (bb.remaining() > 0) {
+                        queue.offerLast(bb);
                     }
                     return n;
                 }
             }
         }
 
+        @Override
         public long skip(long n) throws IOException {
             // TODO
-            return 0;
+            throw new UnsupportedOperationException();
         }
 
+        @Override
         public int available() throws IOException {
             // TODO
             return 0;
         }
 
+        @Override
         public void close() throws IOException {
             closed = true;
         }
 
+        @Override
         public void mark(int readlimit) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public void reset() throws IOException {
             is.reset();
         }
 
+        @Override
         public boolean markSupported() {
             return false;
         }

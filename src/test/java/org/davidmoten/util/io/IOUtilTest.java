@@ -19,7 +19,6 @@ import java.util.zip.GZIPOutputStream;
 import org.junit.Test;
 
 public class IOUtilTest {
-    
 
     @Test
     public void testRoundTripIdentity() throws IOException {
@@ -39,14 +38,18 @@ public class IOUtilTest {
     public void testRoundTripGzip() throws IOException {
         testRoundTripGzip("hi there");
     }
-    
+
     @Test
     public void testRoundTripGzipLong() throws IOException {
+        testRoundTripGzip(createLongString());
+    }
+
+    private static String createLongString() {
         StringWriter w = new StringWriter();
-        for (int i = 0;i<1000;i++) {
+        for (int i = 0; i < 1000; i++) {
             w.write(UUID.randomUUID().toString());
         }
-        testRoundTripGzip(w.toString());
+        return w.toString();
     }
 
     private void testRoundTripGzip(String s) throws IOException {
@@ -55,7 +58,7 @@ public class IOUtilTest {
         List<String> list = new BufferedReader(
                 new InputStreamReader(new GZIPInputStream(b), StandardCharsets.UTF_8)).lines()
                         .collect(Collectors.toList());
-        assertEquals("hi there", list.get(0));
+        assertEquals(s, list.get(0));
         assertEquals(1, list.size());
     }
 
