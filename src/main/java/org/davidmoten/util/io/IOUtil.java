@@ -160,7 +160,7 @@ public final class IOUtil {
         @Override
         public void write(int b) throws IOException {
             ByteBuffer bb = ByteBuffer.allocate(1);
-            bb.put((byte) (b - 128));
+            bb.put((byte) (b));
             bb.position(0);
             queue.add(bb);
         }
