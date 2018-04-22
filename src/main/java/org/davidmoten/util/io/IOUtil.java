@@ -51,7 +51,7 @@ public final class IOUtil {
             if (n == -1) {
                 return -1;
             } else {
-                return b[0] + 128; // must be 0-255
+                return b[0] & 0xff; // must be 0-255
             }
         }
 
@@ -166,9 +166,4 @@ public final class IOUtil {
         }
 
     }
-
-    public static void main(String[] args) {
-        System.out.println((byte) 255);
-    }
-    
 }
