@@ -18,7 +18,18 @@ import org.junit.Test;
 public class IOUtilTest {
 
     @Test
-    public void test() throws IOException {
+    public void testRoundTripIdentity() throws IOException {
+        String s = "hi there";
+        ByteArrayInputStream a = new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
+        InputStream b = IOUtil.pipe(a, o -> o);
+        List<String> list = new BufferedReader(new InputStreamReader(b, StandardCharsets.UTF_8))
+                .lines().collect(Collectors.toList());
+        assertEquals("hi there", list.get(0));
+        assertEquals(1, list.size());
+    }
+
+    @Test
+    public void testRoundTripGzip() throws IOException {
         String s = "hi there";
         ByteArrayInputStream a = new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
         InputStream b = IOUtil.pipe(a, o -> new GZIPOutputStream(o));

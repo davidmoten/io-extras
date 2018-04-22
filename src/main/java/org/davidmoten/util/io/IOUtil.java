@@ -83,13 +83,12 @@ public final class IOUtil {
                         }
                     }
                 } else {
-                    int leftOver = Math.max(0, bb.remaining() - length);
-                    if (leftOver > 0) {
+                    int n = Math.min(bb.remaining(), length);
+                    if (n < bb.remaining()) {
                         ByteBuffer bb2 = bb.duplicate();
-                        bb2.position(bb2.position() + length);
+                        bb2.position(bb2.position() + n);
                         queue.offerLast(bb2);
                     }
-                    int n = Math.min(bb.remaining(), length);
                     if (bytes != null) {
                         bb.get(bytes, 0, n);
                     }
@@ -168,4 +167,8 @@ public final class IOUtil {
 
     }
 
+    public static void main(String[] args) {
+        System.out.println((byte) 255);
+    }
+    
 }
