@@ -99,13 +99,11 @@ public final class IOUtil {
 
         @Override
         public long skip(long n) throws IOException {
-            // TODO
             throw new UnsupportedOperationException();
         }
 
         @Override
         public int available() throws IOException {
-            // TODO
             return 0;
         }
 
@@ -156,11 +154,12 @@ public final class IOUtil {
 
         @Override
         public void flush() throws IOException {
-            // do nothing
+            // ignore
         }
 
         @Override
         public void close() throws IOException {
+            // ignore
         }
 
         @Override

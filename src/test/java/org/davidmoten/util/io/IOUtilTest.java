@@ -25,6 +25,11 @@ public class IOUtilTest {
         testRoundTripIdentity("hi there");
     }
 
+    @Test
+    public void testRoundTripIdentityWithSmallBuffers() throws IOException {
+        testRoundTripIdentityBuffered("hi there");
+    }
+    
     private void testRoundTripIdentity(String s) throws IOException {
         ByteArrayInputStream a = new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
         InputStream b = IOUtil.pipe(a, o -> o);
@@ -34,6 +39,16 @@ public class IOUtilTest {
         assertEquals(1, list.size());
     }
 
+    private void testRoundTripIdentityBuffered(String s) throws IOException {
+        InputStream a = new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
+        InputStream b = IOUtil.pipe(a, o -> o, 2);
+        List<String> list = new BufferedReader(new InputStreamReader(b, StandardCharsets.UTF_8), 3)
+                .lines().collect(Collectors.toList());
+        assertEquals(s, list.get(0));
+        assertEquals(1, list.size());
+    }
+
+    
     @Test
     public void testRoundTripGzip() throws IOException {
         testRoundTripGzip("hi there");
