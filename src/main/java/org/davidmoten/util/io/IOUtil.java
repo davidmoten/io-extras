@@ -66,6 +66,9 @@ public final class IOUtil {
         }
 
         private int readInternal(byte[] bytes, int offset, int length) throws IOException {
+            if (length == 0) {
+                return 0;
+            }
             if (closed) {
                 throw new IOException("Stream closed");
             }
@@ -80,8 +83,10 @@ public final class IOUtil {
                         if (n == -1) {
                             done = true;
                             out.close();
-                        } else {
+                        } else if (n > 0) {
                             out.write(c, 0, n);
+                        } else {
+                            return 0;
                         }
                     }
                 } else {
@@ -159,6 +164,7 @@ public final class IOUtil {
 
         @Override
         public void close() throws IOException {
+            System.out.println("closed");
             // ignore
         }
 

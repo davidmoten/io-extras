@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -80,6 +81,7 @@ public class IOUtilTest {
                         .collect(Collectors.toList());
         assertEquals("hi there", list.get(0));
         assertEquals(1, list.size());
+        ByteArrayOutputStream b;
     }
 
     private static final class ByByteOutputStream extends OutputStream {
