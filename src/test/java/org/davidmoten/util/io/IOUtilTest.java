@@ -51,7 +51,7 @@ public class IOUtilTest {
 
     @Test
     public void testRoundTripGzipLong() throws IOException {
-        testRoundTripGzip(createLongString(), 2);
+        testRoundTripGzip(createLongString(), 8192);
     }
 
     private static String createLongString() {

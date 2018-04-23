@@ -23,12 +23,13 @@ public final class TransformedInputStream extends InputStream implements Runnabl
             int bufferSize) throws IOException {
         this.is = is;
         this.queue = new ArrayDeque<>();
-        this.out = transform.apply(new QueuedOutputStream(queue));
         this.bufferSize = bufferSize;
+        this.out = transform.apply(new QueuedOutputStream(queue));
     }
 
     @Override
     public int read() throws IOException {
+        System.out.println("single read");
         byte[] b = new byte[1];
         int n = readInternal(b, 0, 1);
         if (n == -1) {
@@ -49,6 +50,7 @@ public final class TransformedInputStream extends InputStream implements Runnabl
     }
 
     private int readInternal(byte[] bytes, int offset, int length) throws IOException {
+        System.out.println("readInternal, length="+ length + ", queue="+ queue);
         if (length == 0) {
             return 0;
         }
@@ -63,6 +65,7 @@ public final class TransformedInputStream extends InputStream implements Runnabl
                 } else {
                     byte[] c = new byte[bufferSize];
                     int n = is.read(c);
+                    System.out.println("read " + n + " bytes");
                     if (n == -1) {
                         done = true;
                         out.close();
@@ -71,6 +74,7 @@ public final class TransformedInputStream extends InputStream implements Runnabl
                     } 
                 }
             } else {
+                System.out.println("polled "+ bb);
                 int n = Math.min(bb.remaining(), length);
                 if (bytes != null) {
                     bb.get(bytes, 0, n);
@@ -78,6 +82,7 @@ public final class TransformedInputStream extends InputStream implements Runnabl
                 if (bb.remaining() > 0) {
                     queue.offerLast(bb);
                 }
+                System.out.println("return byte count " + n);
                 return n;
             }
         }
