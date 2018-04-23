@@ -14,6 +14,13 @@ public final class QueuedOutputStream extends OutputStream {
     }
 
     @Override
+    public void write(int b) throws IOException {
+        byte[] bytes = new byte[1];
+        bytes[0] = (byte) b;
+        queue.add(ByteBuffer.wrap(bytes));
+    }
+
+    @Override
     public void write(byte[] b) throws IOException {
         add(ByteBuffer.wrap(b));
     }
@@ -37,14 +44,6 @@ public final class QueuedOutputStream extends OutputStream {
     public void close() throws IOException {
         System.out.println("closed");
         // ignore
-    }
-
-    @Override
-    public void write(int b) throws IOException {
-        ByteBuffer bb = ByteBuffer.allocate(1);
-        bb.put((byte) (b));
-        bb.position(0);
-        queue.add(bb);
     }
 
 }

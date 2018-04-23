@@ -54,6 +54,14 @@ public class IOUtilTest {
         testRoundTripGzip(createLongString(), 8192);
     }
 
+    @Test
+    public void testWriteInConstructorAndWriteOnClose() throws IOException {
+        byte[] m = new byte[] { 101, 102 };
+        ByteArrayInputStream a = new ByteArrayInputStream(m);
+        InputStream b = IOUtil.pipe(a, o -> new SpecialOutputStream(o));
+        assertArrayEquals(new byte[] { 1, 2, 101, 102, 5 }, readAll(b));
+    }
+
     private static String createLongString() {
         StringWriter w = new StringWriter();
         for (int i = 0; i < 30; i++) {
@@ -109,6 +117,35 @@ public class IOUtilTest {
             os.write(b);
         }
 
+    }
+
+    private static final class SpecialOutputStream extends OutputStream {
+
+        private final OutputStream os;
+
+        SpecialOutputStream(OutputStream os) throws IOException {
+            this.os = os;
+            os.write(create(2));
+        }
+
+        @Override
+        public void write(int b) throws IOException {
+            os.write(b);
+        }
+
+        @Override
+        public void close() throws IOException {
+            os.write((byte) 5);
+        }
+
+    }
+
+    private static byte[] create(int length) {
+        byte[] b = new byte[length];
+        for (int i = 0; i < length; i++) {
+            b[i] = (byte) (i + 1);
+        }
+        return b;
     }
 
 }

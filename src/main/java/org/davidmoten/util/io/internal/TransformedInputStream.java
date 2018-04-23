@@ -50,7 +50,7 @@ public final class TransformedInputStream extends InputStream implements Runnabl
     }
 
     private int readInternal(byte[] bytes, int offset, int length) throws IOException {
-        System.out.println("readInternal, length="+ length + ", queue="+ queue);
+        System.out.println("readInternal, length=" + length + ", queue=" + queue);
         if (length == 0) {
             return 0;
         }
@@ -71,14 +71,12 @@ public final class TransformedInputStream extends InputStream implements Runnabl
                         out.close();
                     } else if (n > 0) {
                         out.write(c, 0, n);
-                    } 
+                    }
                 }
             } else {
-                System.out.println("polled "+ bb);
+                System.out.println("polled " + bb);
                 int n = Math.min(bb.remaining(), length);
-                if (bytes != null) {
-                    bb.get(bytes, 0, n);
-                }
+                bb.get(bytes, 0, n);
                 if (bb.remaining() > 0) {
                     queue.offerLast(bb);
                 }
