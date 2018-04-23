@@ -1,10 +1,12 @@
 package org.davidmoten.util.io;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -61,13 +63,10 @@ public class IOUtilTest {
     }
 
     private void testRoundTripGzip(String s, int bufferSize) throws IOException {
+        byte[] m = s.getBytes(StandardCharsets.UTF_8);
         ByteArrayInputStream a = new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
         InputStream b = IOUtil.pipe(a, o -> new GZIPOutputStream(o), bufferSize);
-        List<String> list = new BufferedReader(
-                new InputStreamReader(new GZIPInputStream(b), StandardCharsets.UTF_8)).lines()
-                        .collect(Collectors.toList());
-        assertEquals(s, list.get(0));
-        assertEquals(1, list.size());
+        assertArrayEquals(m, readAll(new GZIPInputStream(b)));
     }
 
     @Test
@@ -80,6 +79,21 @@ public class IOUtilTest {
                         .collect(Collectors.toList());
         assertEquals("hi there", list.get(0));
         assertEquals(1, list.size());
+    }
+
+    private static byte[] readAll(InputStream is) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        byte[] buffer = new byte[8192];
+        int n;
+        try {
+            while ((n = is.read(buffer)) != -1) {
+                bytes.write(buffer, 0, n);
+            }
+            bytes.close();
+            return bytes.toByteArray();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static final class ByByteOutputStream extends OutputStream {

@@ -68,9 +68,7 @@ public final class TransformedInputStream extends InputStream implements Runnabl
                         out.close();
                     } else if (n > 0) {
                         out.write(c, 0, n);
-                    } else {
-                        return 0;
-                    }
+                    } 
                 }
             } else {
                 int n = Math.min(bb.remaining(), length);
