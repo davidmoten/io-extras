@@ -30,7 +30,6 @@ public final class TransformedInputStream extends InputStream implements Runnabl
 
     @Override
     public int read() throws IOException {
-        System.out.println("single read");
         byte[] b = new byte[1];
         int n = readInternal(b, 0, 1);
         if (n == -1) {
@@ -51,7 +50,6 @@ public final class TransformedInputStream extends InputStream implements Runnabl
     }
 
     private int readInternal(byte[] bytes, int offset, int length) throws IOException {
-        System.out.println("readInternal, length=" + length + ", queue=" + queue);
         if (length == 0) {
             return 0;
         }
@@ -75,15 +73,11 @@ public final class TransformedInputStream extends InputStream implements Runnabl
                     }
                 }
             } else {
-                System.out.println("polled " + bb + ": " + Util.toString(bb));
                 int n = Math.min(bb.remaining(), length);
                 bb.get(bytes, 0, n);
-                System.out.println("returning bytes " + Arrays.toString(Arrays.copyOf(bytes, n)));
                 if (bb.remaining() > 0) {
                     queue.offerLast(bb);
-                    System.out.println("added to front of queue " + bb);
                 }
-                System.out.println("return byte count " + n);
                 return n;
             }
         }

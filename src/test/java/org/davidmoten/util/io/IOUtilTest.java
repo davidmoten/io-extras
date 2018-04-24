@@ -77,7 +77,6 @@ public class IOUtilTest {
         GZIPOutputStream g = new GZIPOutputStream(out);
         g.write(m);
         g.close();
-        System.out.println(Arrays.toString(out.toByteArray()));
         ByteArrayInputStream a = new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
         InputStream b = IOUtil.pipe(a, o -> new GZIPOutputStream(o, 8,false), bufferSize);
         assertArrayEquals(m, readAll(new GZIPInputStream(b)));

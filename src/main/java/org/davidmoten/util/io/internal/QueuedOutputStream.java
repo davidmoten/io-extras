@@ -34,7 +34,6 @@ public final class QueuedOutputStream extends OutputStream {
         // must copy the byte buffer because may get reused upstream (this happens with
         // GzipOutputStream!)
         queue.offer(Util.copy(bb));
-        System.out.println("added to queue " + bb + ": " + Util.toString(bb));
     }
     
     @Override
@@ -44,7 +43,6 @@ public final class QueuedOutputStream extends OutputStream {
 
     @Override
     public void close() throws IOException {
-        System.out.println("closed");
         // ignore
     }
 
