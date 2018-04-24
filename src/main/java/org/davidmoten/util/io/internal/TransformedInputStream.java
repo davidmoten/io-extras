@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Deque;
 
 import org.davidmoten.util.io.FunctionCanThrow;
@@ -65,7 +66,7 @@ public final class TransformedInputStream extends InputStream implements Runnabl
                 } else {
                     byte[] c = new byte[bufferSize];
                     int n = is.read(c);
-                    System.out.println("read " + n + " bytes");
+
                     if (n == -1) {
                         done = true;
                         out.close();
@@ -74,11 +75,13 @@ public final class TransformedInputStream extends InputStream implements Runnabl
                     }
                 }
             } else {
-                System.out.println("polled " + bb);
+                System.out.println("polled " + bb + ": " + Util.toString(bb));
                 int n = Math.min(bb.remaining(), length);
                 bb.get(bytes, 0, n);
+                System.out.println("returning bytes " + Arrays.toString(Arrays.copyOf(bytes, n)));
                 if (bb.remaining() > 0) {
                     queue.offerLast(bb);
+                    System.out.println("added to front of queue " + bb);
                 }
                 System.out.println("return byte count " + n);
                 return n;

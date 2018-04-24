@@ -17,7 +17,7 @@ public final class QueuedOutputStream extends OutputStream {
     public void write(int b) throws IOException {
         byte[] bytes = new byte[1];
         bytes[0] = (byte) b;
-        queue.add(ByteBuffer.wrap(bytes));
+        add(ByteBuffer.wrap(bytes));
     }
 
     @Override
@@ -31,10 +31,12 @@ public final class QueuedOutputStream extends OutputStream {
     }
 
     private void add(ByteBuffer bb) {
-        queue.add(bb);
-        System.out.println("added to queue " + bb);
+        // must copy the byte buffer because may get reused upstream (this happens with
+        // GzipOutputStream!)
+        queue.offer(Util.copy(bb));
+        System.out.println("added to queue " + bb + ": " + Util.toString(bb));
     }
-
+    
     @Override
     public void flush() throws IOException {
         // ignore

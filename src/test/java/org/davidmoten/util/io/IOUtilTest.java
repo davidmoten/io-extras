@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -64,7 +65,7 @@ public class IOUtilTest {
 
     private static String createLongString() {
         StringWriter w = new StringWriter();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 1; i++) {
             w.write(UUID.randomUUID().toString());
         }
         return w.toString();
@@ -72,8 +73,13 @@ public class IOUtilTest {
 
     private void testRoundTripGzip(String s, int bufferSize) throws IOException {
         byte[] m = s.getBytes(StandardCharsets.UTF_8);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        GZIPOutputStream g = new GZIPOutputStream(out);
+        g.write(m);
+        g.close();
+        System.out.println(Arrays.toString(out.toByteArray()));
         ByteArrayInputStream a = new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
-        InputStream b = IOUtil.pipe(a, o -> new GZIPOutputStream(o), bufferSize);
+        InputStream b = IOUtil.pipe(a, o -> new GZIPOutputStream(o, 8,false), bufferSize);
         assertArrayEquals(m, readAll(new GZIPInputStream(b)));
     }
 
