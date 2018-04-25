@@ -15,12 +15,13 @@ public final class TransformedInputStream extends InputStream implements Runnabl
     private final Deque<ByteBuffer> queue;
     private final int bufferSize;
     private final OutputStream out;
+    private final byte[] singleByte = new byte[1];
     private boolean done;
     private boolean closed;
 
     public TransformedInputStream(InputStream is,
-            IOFunction<? super OutputStream, ? extends OutputStream> transform,
-            int bufferSize) throws IOException {
+            IOFunction<? super OutputStream, ? extends OutputStream> transform, int bufferSize)
+            throws IOException {
         this.is = is;
         this.queue = new ArrayDeque<>();
         this.bufferSize = bufferSize;
@@ -29,12 +30,11 @@ public final class TransformedInputStream extends InputStream implements Runnabl
 
     @Override
     public int read() throws IOException {
-        byte[] b = new byte[1];
-        int n = readInternal(b, 0, 1);
+        int n = readInternal(singleByte, 0, 1);
         if (n == -1) {
             return -1;
         } else {
-            return b[0] & 0xff; // must be 0-255
+            return singleByte[0] & 0xff; // must be 0-255
         }
     }
 
@@ -67,7 +67,7 @@ public final class TransformedInputStream extends InputStream implements Runnabl
                     if (n == -1) {
                         done = true;
                         out.close();
-                    } else if (n > 0) {
+                    } else {
                         out.write(c, 0, n);
                     }
                 }
