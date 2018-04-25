@@ -99,7 +99,11 @@ public final class TransformedInputStream extends InputStream {
                     result += v;
                     n -= v;
                 } else {
-                    return result;
+                    if (result == 0) {
+                        return -1;
+                    } else {
+                        return result;
+                    }
                 }
             }
         }

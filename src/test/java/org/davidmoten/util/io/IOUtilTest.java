@@ -126,6 +126,42 @@ public class IOUtilTest {
     }
 
     @Test
+    public void testReadOfLength0() throws IOException {
+        byte[] bytes = new byte[] { 100, 101 };
+        InputStream is = IOUtil.pipe(new ByteArrayInputStream(bytes),
+                o -> new ByByteOutputStream(o));
+        assertEquals(100, is.read());
+        assertEquals(0, is.read(new byte[2], 0, 0));
+
+    }
+
+    @Test
+    public void testSkipToEnd() throws IOException {
+        byte[] bytes = new byte[] { 100, 101 };
+        InputStream is = IOUtil.pipe(new ByteArrayInputStream(bytes),
+                o -> new ByByteOutputStream(o));
+        assertEquals(2, is.skip(2));
+        assertEquals(-1, is.skip(1));
+    }
+
+    @Test
+    public void testSkipPastEnd() throws IOException {
+        byte[] bytes = new byte[] { 100, 101 };
+        InputStream is = IOUtil.pipe(new ByteArrayInputStream(bytes),
+                o -> new ByByteOutputStream(o));
+        assertEquals(2, is.skip(3));
+        assertEquals(-1, is.skip(1));
+    }
+
+    @Test(expected = IOException.class)
+    public void testResetThrows() throws IOException {
+        byte[] bytes = new byte[] { 100, 101 };
+        InputStream is = IOUtil.pipe(new ByteArrayInputStream(bytes),
+                o -> new ByByteOutputStream(o));
+        is.reset();
+    }
+
+    @Test
     public void testByteByByte() throws IOException {
         byte[] bytes = new byte[] { 100, 101 };
         InputStream is = IOUtil.pipe(new ByteArrayInputStream(bytes),
