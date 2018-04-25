@@ -16,6 +16,7 @@ public final class TransformedInputStream extends InputStream implements Runnabl
     private final int bufferSize;
     private final OutputStream out;
     private final byte[] singleByte = new byte[1];
+    private final byte[] buffer;
     private boolean done;
     private boolean closed;
 
@@ -25,6 +26,7 @@ public final class TransformedInputStream extends InputStream implements Runnabl
         this.is = is;
         this.queue = new ArrayDeque<>();
         this.bufferSize = bufferSize;
+        this.buffer = new byte[bufferSize];
         this.out = transform.apply(new QueuedOutputStream(queue));
     }
 
@@ -61,19 +63,21 @@ public final class TransformedInputStream extends InputStream implements Runnabl
                 if (done) {
                     return -1;
                 } else {
-                    byte[] c = new byte[bufferSize];
-                    int n = is.read(c);
-
+                    int n = is.read(buffer);
                     if (n == -1) {
                         done = true;
                         out.close();
                     } else {
-                        out.write(c, 0, n);
+                        out.write(buffer, 0, n);
                     }
                 }
             } else {
                 int n = Math.min(bb.remaining(), length);
-                bb.get(bytes, 0, n);
+                if (bytes != null) {
+                    bb.get(bytes, 0, n);
+                } else {
+                    bb.position(bb.position() + n);
+                }
                 if (bb.remaining() > 0) {
                     queue.offerLast(bb);
                 }
@@ -84,7 +88,21 @@ public final class TransformedInputStream extends InputStream implements Runnabl
 
     @Override
     public long skip(long n) throws IOException {
-        throw new UnsupportedOperationException();
+        long result = 0;
+        while (true) {
+            if (n == 0) {
+                return result;
+            } else {
+                int m = Math.min((int) Math.min((long) Integer.MAX_VALUE, n), bufferSize);
+                int v = readInternal(null, 0, m);
+                if (v != -1) {
+                    result += v;
+                    n -= v;
+                } else {
+                    return result;
+                }
+            }
+        }
     }
 
     @Override
@@ -99,12 +117,12 @@ public final class TransformedInputStream extends InputStream implements Runnabl
 
     @Override
     public void mark(int readlimit) {
-        throw new UnsupportedOperationException();
+        // do nothing
     }
 
     @Override
     public void reset() throws IOException {
-        is.reset();
+        throw new IOException("reset not supported");
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.davidmoten.util.io;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -87,6 +88,40 @@ public class IOUtilTest {
         ByteArrayInputStream a = new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
         InputStream b = IOUtil.pipe(a, o -> new GZIPOutputStream(o, 8, false), bufferSize);
         assertArrayEquals(m, readAll(new GZIPInputStream(b)));
+    }
+
+    @Test
+    public void testGzip() throws IOException {
+        byte[] bytes = "hello there you how's things?".getBytes();
+        assertArrayEquals(bytes,
+                readAll(IOUtil.gunzip(IOUtil.gzip(new ByteArrayInputStream(bytes)))));
+    }
+
+    @Test
+    public void testMarkNotSupported() throws IOException {
+        byte[] bytes = "hello there you how's things?".getBytes();
+        InputStream is = IOUtil.gzip(new ByteArrayInputStream(bytes));
+        assertFalse(is.markSupported());
+    }
+
+    @Test
+    public void testMarkDoesNothing() throws IOException {
+        byte[] bytes = "hello there you how's things?".getBytes();
+        InputStream is = IOUtil.gzip(new ByteArrayInputStream(bytes));
+        is.mark(1);
+    }
+
+    @Test
+    public void testSkip() throws IOException {
+        byte[] bytes = new byte[] { -45, 62, 77 };
+        {
+            InputStream is = IOUtil.gzip(new ByteArrayInputStream(bytes));
+            System.out.println(Arrays.toString(readAll(is)));
+        }
+        InputStream is = IOUtil.gzip(new ByteArrayInputStream(bytes));
+        assertEquals(31, is.read());
+        assertEquals(9, is.skip(9));
+        assertEquals(-69 & 0xff, is.read());
     }
 
     @Test
