@@ -3,7 +3,7 @@ Java utilities for IO. Requires Java 8+.
 
 Status: *pre-alpha*
 
-## OutputStreams as InputStreams
+## OutputStreams as InputStreams using IOUtil.pipe
 If you have a transformation that you can express with `OutputStream`s then you can apply that transformation *synchronously* to an `InputStream` using this library.
 
 An example is you want to pass an *InputStream* to a library but you want that `InputStream` to be compressed with *gzip* as well:
@@ -12,19 +12,25 @@ An example is you want to pass an *InputStream* to a library but you want that `
 InputStream is = new FileInputStream("myfile.txt");
 
 // zip the input stream!
-InputStream gz = IOUtil.transform(is, o -> new GZIPOutputStream(o));
+InputStream gz = IOUtil.pipe(is, o -> new GZIPOutputStream(o));
 
 // upload the zipped input stream to an AWS S3 object
 s3.putObject(bucket, "myfile.txt.gz", gz, metadata);
 
 ```
 
+In fact for gzip in particular there is a dedicated method:
+
+```java
+InputStream gz = IOUtil.gzip(is);
+```
+
 ### Options
-Internally, the `IOUtil.transform` method uses a buffer so that data is read into a fixed length byte array. You can specify the `bufferSize` like this:
+Internally, the `IOUtil.pipe` method uses a buffer so that data is read into a fixed length byte array. You can specify the `bufferSize` like this:
 
 ```java
 // set the buffer size (default is 8192)
-InputStream gz = IOUtil.transform(is, o -> new GZIPOutputStream(o), 4096);
+InputStream gz = IOUtil.pipe(is, o -> new GZIPOutputStream(o), 4096);
 ```
 
 ### Algorithm
