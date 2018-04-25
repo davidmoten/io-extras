@@ -22,6 +22,8 @@ import java.util.zip.GZIPOutputStream;
 
 import org.junit.Test;
 
+import com.github.davidmoten.junit.Asserts;
+
 public class IOUtilTest {
 
     @Test
@@ -63,9 +65,14 @@ public class IOUtilTest {
         assertArrayEquals(new byte[] { 1, 2, 101, 102, 5 }, readAll(b));
     }
 
+    @Test
+    public void isUtilityClass() {
+        Asserts.assertIsUtilityClass(IOUtil.class);
+    }
+
     private static String createLongString() {
         StringWriter w = new StringWriter();
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 1000; i++) {
             w.write(UUID.randomUUID().toString());
         }
         return w.toString();
@@ -78,7 +85,7 @@ public class IOUtilTest {
         g.write(m);
         g.close();
         ByteArrayInputStream a = new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
-        InputStream b = IOUtil.pipe(a, o -> new GZIPOutputStream(o, 8,false), bufferSize);
+        InputStream b = IOUtil.pipe(a, o -> new GZIPOutputStream(o, 8, false), bufferSize);
         assertArrayEquals(m, readAll(new GZIPInputStream(b)));
     }
 
