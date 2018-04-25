@@ -9,7 +9,7 @@ import java.util.Deque;
 
 import org.davidmoten.util.io.IOFunction;
 
-public final class TransformedInputStream extends InputStream implements Runnable {
+public final class TransformedInputStream extends InputStream {
 
     private final InputStream is;
     private final Deque<ByteBuffer> queue;
@@ -128,11 +128,6 @@ public final class TransformedInputStream extends InputStream implements Runnabl
     @Override
     public boolean markSupported() {
         return false;
-    }
-
-    @Override
-    public void run() {
-        closed = true;
     }
 
 }

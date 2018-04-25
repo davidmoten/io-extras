@@ -3,6 +3,7 @@ package org.davidmoten.util.io;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -122,6 +123,30 @@ public class IOUtilTest {
         assertEquals(31, is.read());
         assertEquals(9, is.skip(9));
         assertEquals(-69 & 0xff, is.read());
+    }
+
+    @Test
+    public void testByteByByte() throws IOException {
+        byte[] bytes = new byte[] { 100, 101 };
+        InputStream is = IOUtil.pipe(new ByteArrayInputStream(bytes),
+                o -> new ByByteOutputStream(o));
+        assertEquals(100, is.read());
+        assertEquals(101, is.read());
+        assertEquals(-1, is.read());
+    }
+
+    @Test
+    public void testReadAfterCloseThrows() throws IOException {
+        byte[] bytes = new byte[] { 100, 101 };
+        InputStream is = IOUtil.pipe(new ByteArrayInputStream(bytes),
+                o -> new ByByteOutputStream(o));
+        is.close();
+        try {
+            is.read();
+            fail();
+        } catch (IOException e) {
+            assertEquals("Stream closed", e.getMessage());
+        }
     }
 
     @Test
