@@ -5,10 +5,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Deque;
 
-import org.davidmoten.util.io.FunctionCanThrow;
+import org.davidmoten.util.io.IOFunction;
 
 public final class TransformedInputStream extends InputStream implements Runnable {
 
@@ -20,7 +19,7 @@ public final class TransformedInputStream extends InputStream implements Runnabl
     private boolean closed;
 
     public TransformedInputStream(InputStream is,
-            FunctionCanThrow<? super OutputStream, ? extends OutputStream> transform,
+            IOFunction<? super OutputStream, ? extends OutputStream> transform,
             int bufferSize) throws IOException {
         this.is = is;
         this.queue = new ArrayDeque<>();
