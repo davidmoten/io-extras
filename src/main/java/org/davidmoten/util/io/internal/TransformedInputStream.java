@@ -50,6 +50,7 @@ public final class TransformedInputStream extends InputStream {
         return readInternal(b, off, len);
     }
 
+    //bytes can be null when are skipping
     private int readInternal(byte[] bytes, int offset, int length) throws IOException {
         if (length == 0) {
             return 0;
