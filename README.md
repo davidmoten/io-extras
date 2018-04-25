@@ -24,7 +24,7 @@ Internally, the `IOUtil.transform` method uses a buffer so that data is read int
 
 ```java
 // set the buffer size (default is 8192)
-InputStream gz = IOUtil.transform(is, o -> new GZIPOutputStream(o, 4096));
+InputStream gz = IOUtil.transform(is, o -> new GZIPOutputStream(o), 4096);
 ```
 
 ### Algorithm
