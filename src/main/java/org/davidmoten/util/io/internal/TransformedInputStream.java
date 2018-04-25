@@ -75,7 +75,7 @@ public final class TransformedInputStream extends InputStream {
             } else {
                 int n = Math.min(bb.remaining(), length);
                 if (bytes != null) {
-                    bb.get(bytes, 0, n);
+                    bb.get(bytes, offset, n);
                 } else {
                     bb.position(bb.position() + n);
                 }

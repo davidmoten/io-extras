@@ -10,7 +10,7 @@
     <artifactId>io-extras</artifactId>
     <version>0.1-SNAPSHOT</version>
     <name>${project.artifactId}</name>
-    <description>RxJava 2 utilities</description>
+    <description>IO related utilities</description>
     <packaging>jar</packaging>
 
     <url>http://github.com/davidmoten/io-extras</url>
@@ -207,11 +207,6 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jdepend-maven-plugin</artifactId>
                 <version>${jdepend.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>javancss-maven-plugin</artifactId>
-                <version>${javancss.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -135,6 +135,17 @@ public class IOUtilTest {
     }
     
     @Test
+    public void testOffsetUsedInRead() throws IOException {
+        byte[] bytes = new byte[] { 100, 101};
+        InputStream is = IOUtil.pipe(new ByteArrayInputStream(bytes),
+                o -> o);
+        byte[] buffer = new byte[10];
+        is.read(buffer, 7, 2);
+        assertEquals(buffer[7], 100);
+        assertEquals(buffer[8], 101);
+    }
+    
+    @Test
     public void testAvailable() throws IOException {
         byte[] bytes = new byte[] { 100, 101};
         InputStream is = IOUtil.pipe(new ByteArrayInputStream(bytes),
