@@ -16,7 +16,7 @@ public class QueuedOutputStreamTest {
     @Test
     public void testIsCopy() throws IOException {
         Queue<ByteBuffer> queue = new LinkedList<>();
-        QueuedOutputStream q = new QueuedOutputStream(queue);
+        QueuedOutputStream q = new QueuedOutputStream(queue, new int[1]);
         byte[] b = new byte[] { 100, 101 };
         q.write(b);
         ByteBuffer bb = queue.poll();

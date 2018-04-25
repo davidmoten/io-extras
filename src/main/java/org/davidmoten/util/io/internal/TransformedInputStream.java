@@ -19,15 +19,15 @@ public final class TransformedInputStream extends InputStream {
     private final byte[] buffer;
     private boolean done;
     private boolean closed;
+    private int[] count = new int[1];
 
-    public TransformedInputStream(InputStream is,
-            IOFunction<? super OutputStream, ? extends OutputStream> transform, int bufferSize)
-            throws IOException {
+    public TransformedInputStream(InputStream is, IOFunction<? super OutputStream, ? extends OutputStream> transform,
+            int bufferSize) throws IOException {
         this.is = is;
         this.queue = new ArrayDeque<>();
         this.bufferSize = bufferSize;
         this.buffer = new byte[bufferSize];
-        this.out = transform.apply(new QueuedOutputStream(queue));
+        this.out = transform.apply(new QueuedOutputStream(queue, count));
     }
 
     @Override
@@ -78,6 +78,7 @@ public final class TransformedInputStream extends InputStream {
                 } else {
                     bb.position(bb.position() + n);
                 }
+                count[0] -= n;
                 if (bb.remaining() > 0) {
                     queue.offerLast(bb);
                 }
@@ -111,7 +112,7 @@ public final class TransformedInputStream extends InputStream {
 
     @Override
     public int available() throws IOException {
-        return 0;
+        return count[0];
     }
 
     @Override

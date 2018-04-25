@@ -16,21 +16,20 @@ public final class IOUtil {
         // prevent instantiation
     }
 
-    public static InputStream pipe(InputStream is,
-            IOFunction<? super OutputStream, ? extends OutputStream> transform, int bufferSize)
-            throws IOException {
+    public static InputStream pipe(InputStream is, IOFunction<? super OutputStream, ? extends OutputStream> transform,
+            int bufferSize) throws IOException {
         return new TransformedInputStream(is, transform, bufferSize);
     }
 
-    public static InputStream pipe(InputStream is,
-            IOFunction<? super OutputStream, ? extends OutputStream> transform) throws IOException {
+    public static InputStream pipe(InputStream is, IOFunction<? super OutputStream, ? extends OutputStream> transform)
+            throws IOException {
         return pipe(is, transform, DEFAULT_BUFFER_SIZE);
     }
 
     public static InputStream gzip(InputStream is) throws IOException {
         return pipe(is, o -> new GZIPOutputStream(o));
     }
-    
+
     public static InputStream gunzip(InputStream is) throws IOException {
         return new GZIPInputStream(is);
     }

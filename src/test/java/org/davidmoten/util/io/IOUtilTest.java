@@ -132,7 +132,20 @@ public class IOUtilTest {
                 o -> new ByByteOutputStream(o));
         assertEquals(100, is.read());
         assertEquals(0, is.read(new byte[2], 0, 0));
-
+    }
+    
+    @Test
+    public void testAvailable() throws IOException {
+        byte[] bytes = new byte[] { 100, 101};
+        InputStream is = IOUtil.pipe(new ByteArrayInputStream(bytes),
+                o -> o);
+        assertEquals(0, is.available());
+        is.read();
+        assertEquals(1, is.available());
+        is.read();
+        assertEquals(0, is.available());
+        assertEquals(-1, is.read());
+        assertEquals(0, is.available());
     }
 
     @Test
