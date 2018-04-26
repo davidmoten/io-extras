@@ -19,7 +19,7 @@ Use this maven dependency:
 <dependency>
   <groupId>com.github.davidmoten</groupId>
   <artifactId>io-extras</artifactId>
-  <version>VERSION_HERE</version>
+  <version>0.1</version>
 </dependency>
 ```
 
