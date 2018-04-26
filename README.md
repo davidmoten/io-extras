@@ -1,7 +1,23 @@
 # io-extras
+<a href="https://travis-ci.org/davidmoten/io-extras"><img src="https://travis-ci.org/davidmoten/io-extras.svg"/></a><br/>
+<a href="https://scan.coverity.com/projects/4834"><img src="https://scan.coverity.com/projects/4834/badge.svg?flat=1"/></a><br/>
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.davidmoten/io-extras/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.github.davidmoten/io-extras)
+
 Java utilities for IO. Requires Java 8+.
 
-Status: *pre-alpha*
+Status: *released to Maven Central*
+
+## Getting started
+
+Use this maven dependency:
+
+```xml
+<dependency>
+  <groupId>com.github.davidmoten</groupId>
+  <artifactId>io-extras</artifactId>
+  <version>VERSION_HERE</version>
+</dependency>
+```
 
 ## OutputStreams as InputStreams using IOUtil.pipe
 If you have a transformation that you can express with `OutputStream`s then you can apply that transformation *synchronously* to an `InputStream` using this library.
