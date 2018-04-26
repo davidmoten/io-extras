@@ -7,6 +7,10 @@ Java utilities for IO. Requires Java 8+.
 
 Status: *released to Maven Central*
 
+[Release Notes](https://github.com/davidmoten/io-extras/releases)
+
+Maven site reports are [here](http://davidmoten.github.io/io-extras/index.html) including [javadoc](http://davidmoten.github.io/io-extras/apidocs/index.html).
+
 ## Getting started
 
 Use this maven dependency:
