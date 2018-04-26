@@ -1,6 +1,6 @@
 # io-extras
 <a href="https://travis-ci.org/davidmoten/io-extras"><img src="https://travis-ci.org/davidmoten/io-extras.svg"/></a><br/>
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.davidmoten/io-extras/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.github.davidmoten/io-extras)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.davidmoten/io-extras/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.github.davidmoten/io-extras)<br/>
 [![codecov](https://codecov.io/gh/davidmoten/io-extras/branch/master/graph/badge.svg)](https://codecov.io/gh/davidmoten/io-extras)
 
 Java utilities for IO. Requires Java 8+.
