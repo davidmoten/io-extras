@@ -7,6 +7,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import org.davidmoten.io.extras.internal.TransformedInputStream;
+import org.davidmoten.io.extras.internal.TransformedOutputStream;
 
 public final class IOUtil {
 
@@ -34,4 +35,15 @@ public final class IOUtil {
         return new GZIPInputStream(is);
     }
 
+    public static OutputStream pipe(OutputStream os, IOFunction<? super InputStream, ? extends InputStream> transform)
+            throws IOException {
+        return pipe(os, transform, DEFAULT_BUFFER_SIZE);
+    }
+
+    private static OutputStream pipe(OutputStream os,
+            IOFunction<? super InputStream, ? extends InputStream> transform,
+            int bufferSize) throws IOException {
+        return new TransformedOutputStream(os, transform, bufferSize);
+    }
+    
 }
