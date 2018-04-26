@@ -33,10 +33,6 @@ InputStream is = new FileInputStream("myfile.txt");
 
 // zip the input stream!
 InputStream gz = IOUtil.pipe(is, o -> new GZIPOutputStream(o));
-
-// upload the zipped input stream to an AWS S3 object
-s3.putObject(bucket, "myfile.txt.gz", gz, metadata);
-
 ```
 
 In fact for gzip in particular there is a dedicated method:
