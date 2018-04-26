@@ -11,7 +11,7 @@ public final class QueuedInputStream extends InputStream {
     private final byte[] singleByte = new byte[1];
     private final Deque<ByteBuffer> queue = new ArrayDeque<>();
     private boolean closed;
-    
+
     public QueuedInputStream() {
     }
 
