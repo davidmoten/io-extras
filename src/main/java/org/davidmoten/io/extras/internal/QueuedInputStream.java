@@ -62,4 +62,8 @@ public final class QueuedInputStream extends InputStream {
         return false;
     }
 
+    public void add(ByteBuffer bb) {
+        queue.offer(bb);
+    }
+
 }

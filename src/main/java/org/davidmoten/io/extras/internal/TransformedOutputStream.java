@@ -3,6 +3,7 @@ package org.davidmoten.io.extras.internal;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 
 import org.davidmoten.io.extras.IOFunction;
 
@@ -32,7 +33,8 @@ public final class TransformedOutputStream extends OutputStream {
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-        //TODO
+        ByteBuffer bb = ByteBuffer.wrap(b, off, len);
+        qis.add(Util.copy(bb));
     }
 
     @Override
