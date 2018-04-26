@@ -15,8 +15,6 @@ public final class QueuedInputStream extends InputStream {
     private final byte[] singleByte = new byte[1];
     private final Deque<ByteBuffer> queue = new ArrayDeque<>();
     private boolean closed;
-    private CountDownLatch latch = new CountDownLatch(1);
-    private final AtomicInteger count = new AtomicInteger();
     private final ReentrantLock lock = new ReentrantLock();
 
     public QueuedInputStream() {
@@ -43,7 +41,6 @@ public final class QueuedInputStream extends InputStream {
             ByteBuffer bb = queue.poll();
             int n = Math.min(bb.remaining(), len);
             bb.get(b, off, n);
-            latch = new CountDownLatch(1);
             if (bb.remaining() > 0) {
                 add(bb);
             }
@@ -54,8 +51,11 @@ public final class QueuedInputStream extends InputStream {
     }
 
     public void add(ByteBuffer bb) {
-        queue.offer(bb);
-        lock.unlock();
+        try {
+            queue.offer(bb);
+        } finally {
+            lock.unlock();
+        }
     }
 
     @Override
