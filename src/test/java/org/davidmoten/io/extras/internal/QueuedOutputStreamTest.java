@@ -9,7 +9,6 @@ import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import org.davidmoten.io.extras.internal.QueuedOutputStream;
 import org.junit.Test;
 
 public class QueuedOutputStreamTest {
@@ -17,7 +16,7 @@ public class QueuedOutputStreamTest {
     @Test
     public void testIsCopy() throws IOException {
         Queue<ByteBuffer> queue = new LinkedList<>();
-        QueuedOutputStream q = new QueuedOutputStream(queue, new int[1]);
+        try (QueuedOutputStream q = new QueuedOutputStream(queue, new int[1])) {
         byte[] b = new byte[] { 100, 101 };
         q.write(b);
         ByteBuffer bb = queue.poll();
@@ -28,6 +27,7 @@ public class QueuedOutputStreamTest {
         assertNotEquals(b, bb.array());
         // get coverage of flush which does nothing
         q.flush();
+        }
     }
 
 }
