@@ -9,6 +9,7 @@ public final class QueuedOutputStream extends OutputStream {
 
     private final Queue<ByteBuffer> queue;
     private final int[] count;// single element array
+    private boolean closed;
 
     QueuedOutputStream(Queue<ByteBuffer> queue, int[] count) {
         this.queue = queue;
@@ -32,7 +33,10 @@ public final class QueuedOutputStream extends OutputStream {
         add(ByteBuffer.wrap(b, off, len));
     }
 
-    private void add(ByteBuffer bb) {
+    private void add(ByteBuffer bb) throws IOException {
+        if (closed) {
+            throw new IOException("Stream closed");
+        }
         // must copy the byte buffer because may get reused upstream (this happens with
         // GzipOutputStream!)
         count[0] += bb.remaining();
@@ -46,7 +50,7 @@ public final class QueuedOutputStream extends OutputStream {
 
     @Override
     public void close() throws IOException {
-        // ignore
+        closed = true;
     }
 
 }
