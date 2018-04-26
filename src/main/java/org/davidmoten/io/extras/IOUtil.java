@@ -1,4 +1,4 @@
-package org.davidmoten.util.io;
+package org.davidmoten.io.extras;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import org.davidmoten.util.io.internal.TransformedInputStream;
+import org.davidmoten.io.extras.internal.TransformedInputStream;
 
 public final class IOUtil {
 

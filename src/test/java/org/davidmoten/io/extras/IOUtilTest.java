@@ -1,4 +1,4 @@
-package org.davidmoten.util.io;
+package org.davidmoten.io.extras;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import org.davidmoten.io.extras.IOUtil;
 import org.junit.Test;
 
 import com.github.davidmoten.junit.Asserts;

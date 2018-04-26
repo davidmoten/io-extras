@@ -1,4 +1,4 @@
-package org.davidmoten.util.io.internal;
+package org.davidmoten.io.extras.internal;
 
 import java.io.IOException;
 import java.io.OutputStream;

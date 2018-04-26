@@ -1,4 +1,4 @@
-package org.davidmoten.util.io.internal;
+package org.davidmoten.io.extras.internal;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -9,6 +9,7 @@ import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import org.davidmoten.io.extras.internal.QueuedOutputStream;
 import org.junit.Test;
 
 public class QueuedOutputStreamTest {

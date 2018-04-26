@@ -1,4 +1,4 @@
-package org.davidmoten.util.io;
+package org.davidmoten.io.extras;
 
 import java.io.IOException;
 

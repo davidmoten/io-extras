@@ -1,4 +1,4 @@
-package org.davidmoten.util.io.internal;
+package org.davidmoten.io.extras.internal;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import org.davidmoten.util.io.IOFunction;
+import org.davidmoten.io.extras.IOFunction;
 
 public final class TransformedInputStream extends InputStream {
 

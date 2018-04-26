@@ -1,9 +1,10 @@
-package org.davidmoten.util.io.internal;
+package org.davidmoten.io.extras.internal;
 
 import static org.junit.Assert.assertEquals;
 
 import java.nio.ByteBuffer;
 
+import org.davidmoten.io.extras.internal.Util;
 import org.junit.Test;
 
 import com.github.davidmoten.junit.Asserts;

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -24,7 +26,7 @@
 
         <cobertura.version>2.7</cobertura.version>
         <checkstyle.version>3.0.0</checkstyle.version>
-        <findbugs.version>2.5.4</findbugs.version>
+        <findbugs.version>3.0.5</findbugs.version>
         <javadoc.version>3.0.0</javadoc.version>
         <pmd.version>3.9.0</pmd.version>
         <jdepend.version>2.0</jdepend.version>
@@ -200,9 +202,15 @@
                     <aggregate>true</aggregate>
                 </configuration>
             </plugin>
-            <!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>findbugs-maven-plugin</artifactId> 
-                <version>${findbugs.version}</version> <configuration> <xmlOutput>true</xmlOutput> 
-                <effort>Max</effort> </configuration> </plugin> -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${findbugs.version}</version>
+                <configuration>
+                    <xmlOutput>true</xmlOutput>
+                    <effort>Max</effort>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jdepend-maven-plugin</artifactId>
