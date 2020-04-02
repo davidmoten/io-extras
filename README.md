@@ -69,5 +69,13 @@ BoundedBufferedReader br = new BoundedBufferedReader(reader, bufferSize, maxLine
 String line = br.readLine();
 ...
 ```
+
 Note that `BoundedBufferedReader` does make efficient use of its buffer. The code for the class is a copy and modification of `BufferedReader` from JDK 8.
 
+To test `BoundedBufferedReader` with a really long line call
+
+```bash
+mvn clean test -Dn=1000000000
+```
+
+`n` is the number of characters in a single long line of input. As a guide n = 2x10^9 takes about 25 seconds to complete. 
