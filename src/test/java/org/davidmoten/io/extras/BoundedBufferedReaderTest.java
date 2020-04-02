@@ -16,6 +16,29 @@ public class BoundedBufferedReaderTest {
         String s  = toString(r);
         assertEquals("ab\nc\n", s);
     }
+    
+    @Test
+    public void testBoundNotMetUnlimitedMaxBufferSize() throws IOException {
+        String s = toString(createReader(5, 10000));
+        BoundedBufferedReader b = new BoundedBufferedReader(createReader(5, 10000));
+        String s2 = toString(b);
+        assertEquals(s, s2);
+    }
+    
+    @Test
+    public void testBoundNotMetLargeMaxBufferSize() throws IOException {
+        String s = toString(createReader(5, 10000));
+        BoundedBufferedReader b = new BoundedBufferedReader(createReader(5, 10000), 512, 1000000);
+        String s2 = toString(b);
+        assertEquals(s, s2);
+    }
+    
+    @Test
+    public void testBoundMet() throws IOException {
+        System.out.println(toString(createReader(500, 10000)));
+        BoundedBufferedReader b = new BoundedBufferedReader(createReader(500, 10000), 16, 32);
+        toString(b);
+    }
 
     private static String toString(Reader r) throws IOException {
         StringBuilder b = new StringBuilder();

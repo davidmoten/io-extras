@@ -161,7 +161,7 @@ public class BoundedBufferedReader extends Reader {
                     dst = delta;
                 } else {
                     /* Reallocate buffer to accommodate read-ahead limit */
-                    if (readAheadLimit > maxBufferSize) {
+                    if (maxBufferSize > 0 && readAheadLimit > maxBufferSize) {
                         throw new BoundExceededException("max buffer size of " + maxBufferSize + " exceeded");
                     }
                     char ncb[] = new char[readAheadLimit];
