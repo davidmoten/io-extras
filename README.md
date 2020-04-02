@@ -11,6 +11,10 @@ Status: *released to Maven Central*
 
 Maven site reports are [here](http://davidmoten.github.io/io-extras/index.html) including [javadoc](http://davidmoten.github.io/io-extras/apidocs/index.html).
 
+## Features
+* OutputStreams as InputStreams using `IOUtil.pipe`
+* `BoundedBufferedReader` to trim long lines and avoid OutOfMemoryError calling `readLine()` when line too long
+
 ## Getting started
 
 Use this maven dependency:

@@ -47,6 +47,14 @@ public class BoundedBufferedReaderTest {
         }
     }
 
+    @Test
+    public void testOutOfMemoryErrorDoesNotOccur() throws IOException {
+        long length = Long.parseLong(System.getProperty("n", Integer.toString(Integer.MAX_VALUE/10)));
+        try (BoundedBufferedReader b = new BoundedBufferedReader(createReader(length, length), 8192, 4)) {
+            assertEquals("abcd", b.readLine());
+        }
+    }
+
     private static String toString(Reader r) throws IOException {
         StringBuilder b = new StringBuilder();
         try (BufferedReader br = new BufferedReader(r)) {
@@ -69,11 +77,11 @@ public class BoundedBufferedReaderTest {
         return b.toString();
     }
 
-    private static Reader createReader(int lineLength, long length) {
+    private static Reader createReader(long lineLength, long length) {
         return new Reader() {
             final char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-            int index = 0;
-            int lineCharsCount = 0;
+            long index = 0;
+            long lineCharsCount = 0;
 
             @Override
             public int read(char[] cbuf, int off, int len) throws IOException {
@@ -87,7 +95,7 @@ public class BoundedBufferedReaderTest {
                         cbuf[i] = '\n';
                         lineCharsCount = 0;
                     } else {
-                        cbuf[i] = chars[index % chars.length];
+                        cbuf[i] = chars[(int) (index % chars.length)];
                         lineCharsCount++;
                         index++;
                     }
