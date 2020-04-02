@@ -41,6 +41,12 @@ public class BoundedBufferedReaderTest {
         assertEquals(line + line + line + line, toString(b));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testNegativeMaxLineLengthThrows() throws IOException {
+        try (BoundedBufferedReader b = new BoundedBufferedReader(createReader(26, 100), 8, -1)) {
+        }
+    }
+
     private static String toString(Reader r) throws IOException {
         StringBuilder b = new StringBuilder();
         try (BufferedReader br = new BufferedReader(r)) {
@@ -77,8 +83,7 @@ public class BoundedBufferedReaderTest {
                 for (int i = off; i < off + len; i++) {
                     if (index == length) {
                         return i - off;
-                    }
-                    if (lineCharsCount == lineLength) {
+                    } else if (lineCharsCount == lineLength) {
                         cbuf[i] = '\n';
                         lineCharsCount = 0;
                     } else {

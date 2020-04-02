@@ -41,9 +41,13 @@ import java.util.stream.StreamSupport;
 /**
  * Reads text from a character-input stream, buffering characters so as to
  * provide for the efficient reading of characters, arrays, and lines.
- *
+ * 
  * <p> The buffer size may be specified, or the default size may be used.  The
  * default is large enough for most purposes.
+ * 
+ * <p> A maximum line length can be specified such that characters read past 
+ * that maximum line length are discarded and not returned in a call to 
+ * {@code readLine()}.
  *
  * <p> In general, each read request made of a Reader causes a corresponding
  * read request to be made of the underlying character or byte stream.  It is
@@ -52,14 +56,15 @@ import java.util.stream.StreamSupport;
  * example,
  *
  * <pre>
- * BufferedReader in
- *   = new BufferedReader(new FileReader("foo.in"));
+ * BoundedBufferedReader in
+ *   = new BoundedBufferedReader(new FileReader("foo.in"), 1000);
  * </pre>
  *
  * will buffer the input from the specified file.  Without buffering, each
  * invocation of read() or readLine() could cause bytes to be read from the
  * file, converted into characters, and then returned, which can be very
- * inefficient.
+ * inefficient. Any line longer than 1000 characters will be trimmed to 1000
+ * characters.
  *
  * <p> Programs that use DataInputStreams for textual input can be localized by
  * replacing each DataInputStream with an appropriate BufferedReader.
@@ -97,11 +102,13 @@ public class BoundedBufferedReader extends Reader {
 
     /**
      * Creates a buffering character-input stream that uses an input buffer of
-     * the specified size.
+     * the specified size. When a a line longer than {@code maxLineLength} is 
+     * encountered the line is trimmed to that maximum length and the rest of 
+     * the line ignored.
      *
      * @param  in   A Reader
      * @param  sz   Input-buffer size
-     * @param  maxLineLength maximum size of the input buffer
+     * @param  maxLineLength maximum size of a returned line in chars
      *
      * @exception  IllegalArgumentException  If {@code sz <= 0}
      */
@@ -307,9 +314,9 @@ public class BoundedBufferedReader extends Reader {
     }
 
     /**
-     * Reads a line of text.  A line is considered to be terminated by any one
-     * of a line feed ('\n'), a carriage return ('\r'), or a carriage return
-     * followed immediately by a linefeed.
+     * Reads a line of text trimmed to {@code maxLineLength} characters.  A line is considered
+     * to be terminated by any one of a line feed ('\n'), a carriage return ('\r'), 
+     * or a carriage return followed immediately by a linefeed.
      *
      * @param      ignoreLF  If true, the next '\n' will be skipped
      *
@@ -395,9 +402,9 @@ public class BoundedBufferedReader extends Reader {
     }
 
     /**
-     * Reads a line of text.  A line is considered to be terminated by any one
-     * of a line feed ('\n'), a carriage return ('\r'), or a carriage return
-     * followed immediately by a linefeed.
+     * Reads a line of text trimmed to {@code maxLineLength} characters.  A line is 
+     * considered to be terminated by any one of a line feed ('\n'), a carriage
+     * return ('\r'), or a carriage return followed immediately by a linefeed.
      *
      * @return     A String containing the contents of the line, not including
      *             any line-termination characters, or null if the end of the
