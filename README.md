@@ -58,3 +58,16 @@ Data is passed through the transformation synchronously and this is achieved by 
 
 ## InputStreams as OutputStreams
 Unfortunately the `InputStream.read` method blocks till a read is available so the only way to handle this is by using another thread. I haven't knocked anything up for this because I think there are products out there already.
+
+## BoundedBufferedReader
+When you call `BufferedReader.readLine()` you can run out of memory if the line is too long. In a situation where your code is reading data from an uncontrolled source (like an HTTP POST from a user)
+this can crash your web server/program which is obviously undesirable. To trim each line without provoking high memory usage:
+
+```java
+BoundedBufferedReader br = new BoundedBufferedReader(reader, bufferSize, maxLineLength);
+...
+String line = br.readLine();
+...
+```
+Note that `BoundedBufferedReader` does make efficient use of its buffer. The code for the class is a copy and modification of `BufferedReader` from JDK 8.
+
