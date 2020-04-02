@@ -76,7 +76,7 @@ public class BoundedBufferedReader extends Reader {
 
     private Reader in;
     
-    private final int maxBufferSize;
+    private final int maxLineLength;
 
     private char cb[];
     private int nChars, nextChar;
@@ -101,22 +101,19 @@ public class BoundedBufferedReader extends Reader {
      *
      * @param  in   A Reader
      * @param  sz   Input-buffer size
-     * @param  maxBufferSize maximum size of the input buffer
+     * @param  maxLineLength maximum size of the input buffer
      *
      * @exception  IllegalArgumentException  If {@code sz <= 0}
      */
-    public BoundedBufferedReader(Reader in, int sz, int maxBufferSize) {
+    public BoundedBufferedReader(Reader in, int sz, int maxLineLength) {
         super(in);
         if (sz <= 0)
             throw new IllegalArgumentException("Buffer size <= 0");
         this.in = in;
-        if (maxBufferSize < 0) {
-            throw new IllegalArgumentException("maxBufferSize cannot be negative");
+        if (maxLineLength < 0) {
+            throw new IllegalArgumentException("maxLineLength cannot be negative");
         }
-        if (maxBufferSize != 0 && maxBufferSize < sz) {
-            throw new IllegalArgumentException("maxBufferSize cannot be less than sz (unless is 0)");
-        }
-        this.maxBufferSize = maxBufferSize;
+        this.maxLineLength = maxLineLength;
         cb = new char[sz];
         nextChar = nChars = 0;
     }
@@ -161,9 +158,6 @@ public class BoundedBufferedReader extends Reader {
                     dst = delta;
                 } else {
                     /* Reallocate buffer to accommodate read-ahead limit */
-                    if (maxBufferSize > 0 && readAheadLimit > maxBufferSize) {
-                        throw new BoundExceededException("max buffer size of " + maxBufferSize + " exceeded");
-                    }
                     char ncb[] = new char[readAheadLimit];
                     System.arraycopy(cb, markedChar, ncb, 0, delta);
                     cb = ncb;
@@ -373,7 +367,8 @@ public class BoundedBufferedReader extends Reader {
                     if (s == null) {
                         str = new String(cb, startChar, i - startChar);
                     } else {
-                        s.append(cb, startChar, i - startChar);
+                        final int maxAvailable = maxAvailable(s);
+                        s.append(cb, startChar, Math.min(maxAvailable, i - startChar));
                         str = s.toString();
                     }
                     nextChar++;
@@ -385,8 +380,17 @@ public class BoundedBufferedReader extends Reader {
 
                 if (s == null)
                     s = new StringBuffer(defaultExpectedLineLength);
-                s.append(cb, startChar, i - startChar);
+                final int maxAvailable = maxAvailable(s);
+                s.append(cb, startChar, Math.min(maxAvailable, i - startChar));
             }
+        }
+    }
+    
+    private int maxAvailable(StringBuffer s) {
+        if (maxLineLength == 0 ) {
+            return Integer.MAX_VALUE;
+        } else {
+            return maxLineLength - s.length();
         }
     }
 

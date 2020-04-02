@@ -35,9 +35,9 @@ public class BoundedBufferedReaderTest {
     
     @Test
     public void testBoundMet() throws IOException {
-        System.out.println(toString(createReader(500, 10000)));
-        BoundedBufferedReader b = new BoundedBufferedReader(createReader(500, 10000), 16, 32);
-        toString(b);
+        System.out.println(toString(createReader(26, 100)));
+        BoundedBufferedReader b = new BoundedBufferedReader(createReader(26, 100), 8, 8);
+        System.out.println(toString(b));
     }
 
     private static String toString(Reader r) throws IOException {
