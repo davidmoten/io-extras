@@ -13,10 +13,10 @@ public class BoundedBufferedReaderTest {
     @Test
     public void testTestReader() throws IOException {
         Reader r = createReader(2, 3);
-        String s  = toString(r);
+        String s = toString(r);
         assertEquals("ab\nc\n", s);
     }
-    
+
     @Test
     public void testBoundNotMetUnlimitedMaxBufferSize() throws IOException {
         String s = toString(createReader(5, 10000));
@@ -24,7 +24,7 @@ public class BoundedBufferedReaderTest {
         String s2 = toString(b);
         assertEquals(s, s2);
     }
-    
+
     @Test
     public void testBoundNotMetLargeMaxBufferSize() throws IOException {
         String s = toString(createReader(5, 10000));
@@ -32,12 +32,13 @@ public class BoundedBufferedReaderTest {
         String s2 = toString(b);
         assertEquals(s, s2);
     }
-    
+
     @Test
     public void testBoundMet() throws IOException {
         System.out.println(toString(createReader(26, 100)));
         BoundedBufferedReader b = new BoundedBufferedReader(createReader(26, 100), 8, 8);
-        System.out.println(toString(b));
+        String line = "abcdefgh\n";
+        assertEquals(line + line + line + line, toString(b));
     }
 
     private static String toString(Reader r) throws IOException {
@@ -48,6 +49,16 @@ public class BoundedBufferedReaderTest {
                 b.append(line);
                 b.append("\n");
             }
+        }
+        return b.toString();
+    }
+
+    private static String toString(BoundedBufferedReader br) throws IOException {
+        StringBuilder b = new StringBuilder();
+        String line = null;
+        while ((line = br.readLine()) != null) {
+            b.append(line);
+            b.append("\n");
         }
         return b.toString();
     }
