@@ -83,7 +83,7 @@
         <dependency>
             <groupId>com.github.davidmoten</groupId>
             <artifactId>guava-mini</artifactId>
-            <version>0.1.1</version>
+            <version>0.1.2</version>
         </dependency>
 
         <!-- test dependencies -->
@@ -108,7 +108,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>${maven.compiler.target}</source>
                     <target>${maven.compiler.target}</target>
@@ -129,7 +129,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.1</version>
+                <version>0.8.5</version>
                 <executions>
                     <execution>
                         <goals>
@@ -144,6 +144,11 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>**/BoundedBufferedReader.*</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
 
             <plugin>
@@ -173,14 +178,6 @@
                 <version>${jxr.version}</version>
                 <configuration>
                     <aggregate>true</aggregate>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>${cobertura.version}</version>
-                <configuration>
-                    <aggregate>false</aggregate>
                 </configuration>
             </plugin>
             <plugin>
