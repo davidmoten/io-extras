@@ -47,7 +47,8 @@ import java.util.stream.StreamSupport;
  * 
  * <p> A maximum line length can be specified such that characters read past 
  * that maximum line length are discarded and not returned in a call to 
- * {@code readLine()}.
+ * {@code readLine()}. Note that the trimmed line is not returned till 
+ * the end of line character or end of file is reached.
  *
  * <p> In general, each read request made of a Reader causes a corresponding
  * read request to be made of the underlying character or byte stream.  It is
@@ -57,13 +58,14 @@ import java.util.stream.StreamSupport;
  *
  * <pre>
  * BoundedBufferedReader in
- *   = new BoundedBufferedReader(new FileReader("foo.in"), 1000);
+ *   = new BoundedBufferedReader(new FileReader("foo.in"), 8192, maxLineLength);
  * </pre>
  *
- * will buffer the input from the specified file.  Without buffering, each
- * invocation of read() or readLine() could cause bytes to be read from the
- * file, converted into characters, and then returned, which can be very
- * inefficient. Any line longer than 1000 characters will be trimmed to 1000
+ * will buffer the input from the specified file using an internal char array
+ * of size 8192.  Without buffering, each invocation of read() or readLine()
+ * could cause bytes to be read from the file, converted into characters, and
+ * then returned, which can be very inefficient. Any line longer than 
+ * {@code maxLineLength} characters will be trimmed to {@code maxLineLength} 
  * characters.
  *
  * <p> Programs that use DataInputStreams for textual input can be localized by
@@ -104,7 +106,7 @@ public class BoundedBufferedReader extends Reader {
      * Creates a buffering character-input stream that uses an input buffer of
      * the specified size. When a a line longer than {@code maxLineLength} is 
      * encountered the line is trimmed to that maximum length and the rest of 
-     * the line ignored.
+     * the line ignored. The whole line is read before the trimmed line is reported.
      *
      * @param  in   A Reader
      * @param  sz   Input-buffer size
