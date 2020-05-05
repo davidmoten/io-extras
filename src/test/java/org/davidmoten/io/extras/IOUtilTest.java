@@ -19,12 +19,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import org.davidmoten.io.extras.IOUtil;
 import org.junit.Test;
 
+import com.github.davidmoten.guavamini.Lists;
 import com.github.davidmoten.junit.Asserts;
 
 public class IOUtilTest {
@@ -220,6 +221,19 @@ public class IOUtilTest {
                         .collect(Collectors.toList());
         assertEquals("hi there", list.get(0));
         assertEquals(1, list.size());
+    }
+    
+    @Test
+    public void testInputStreamToStream() {
+        ByteArrayInputStream b = new ByteArrayInputStream("hello\nthere".getBytes(StandardCharsets.UTF_8));
+        Stream<String> stream = new BufferedReader(new InputStreamReader(b, StandardCharsets.UTF_8)).lines();
+        assertEquals(Lists.newArrayList("hello", "there"), stream.collect(Collectors.toList()));
+    }
+    
+    @Test
+    public void testStreamToInputStream() {
+        Stream<byte[]> stream = Stream.of("hello\n".getBytes(StandardCharsets.UTF_8), "there".getBytes(StandardCharsets.UTF_8));
+        InputStream in = IOUtil.toInputStream(stream);
     }
 
     private static byte[] readAll(InputStream is) {
