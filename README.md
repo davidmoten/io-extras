@@ -14,6 +14,7 @@ Maven site reports are [here](http://davidmoten.github.io/io-extras/index.html) 
 ## Features
 * OutputStreams as InputStreams using `IOUtil.pipe`
 * `BoundedBufferedReader` to trim long lines and avoid OutOfMemoryError calling `readLine()` when line too long
+* `Stream<byte[]>` to InputStream using `IOUtil.toInputStream`
 
 ## Getting started
 
@@ -79,3 +80,17 @@ mvn clean test -Dn=1000000000
 ```
 
 `n` is the number of characters in a single long line of input. As a guide n = 2x10^9 takes about 25 seconds to complete. 
+
+## Convert a Stream of byte[] to InputStream
+
+```java
+InputStream in = IOUtil.toInputStream(stream);
+```
+
+An example of where this is useful is if you wanted to filter lines from an InputStream:
+
+```java
+InputStream in = ...;
+Stream<String> lines =  new BufferedReader(new InputStreamReader(in)).lines();
+InputStream in2 = IOUtil.toInputStream(lines.map(line ->  (line + "\n").getBytes(StandardCharsets.UTF_8)));
+``` 
