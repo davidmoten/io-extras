@@ -91,6 +91,12 @@ An example of where this is useful is if you wanted to filter lines from an Inpu
 
 ```java
 InputStream in = ...;
-Stream<String> lines =  new BufferedReader(new InputStreamReader(in)).lines();
-InputStream in2 = IOUtil.toInputStream(lines.map(line ->  (line + "\n").getBytes(StandardCharsets.UTF_8)));
+Stream<byte[]> lines = new BufferedReader(new InputStreamReader(in))
+    .lines()
+    // filter out empty lines and comment lines
+    .filter(line -> !line.trim().isEmpty() && !line.startsWith("#"))
+    // not perfect, may add an extra \n to the source!
+    // to fix use kool Stream with buffer operator
+    .map(line -> (line + "\n").getBytes(StandardCharsets.UTF_8));
+InputStream in2 = IOUtil.toInputStream(lines);
 ``` 
