@@ -24,7 +24,7 @@ Use this maven dependency:
 <dependency>
   <groupId>com.github.davidmoten</groupId>
   <artifactId>io-extras</artifactId>
-  <version>0.1</version>
+  <version>VERSION_HERE</version>
 </dependency>
 ```
 
