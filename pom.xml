@@ -22,9 +22,7 @@
         <jmh.version>1.16</jmh.version>
         <exec.version>1.4.0</exec.version>
 
-        <cobertura.version>2.7</cobertura.version>
         <checkstyle.version>3.0.0</checkstyle.version>
-        <findbugs.version>3.0.5</findbugs.version>
         <javadoc.version>3.0.0</javadoc.version>
         <pmd.version>3.15.0</pmd.version>
         <jdepend.version>2.0</jdepend.version>
@@ -195,15 +193,6 @@
                 <configuration>
                     <targetJdk>${maven.compiler.target}</targetJdk>
                     <aggregate>true</aggregate>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>${findbugs.version}</version>
-                <configuration>
-                    <xmlOutput>true</xmlOutput>
-                    <effort>Max</effort>
                 </configuration>
             </plugin>
             <plugin>
