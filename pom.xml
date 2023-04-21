@@ -20,7 +20,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <checkstyle.version>3.2.1</checkstyle.version>
+        <checkstyle.version>3.2.2</checkstyle.version>
         <javadoc.version>3.5.0</javadoc.version>
         <pmd.version>3.20.0</pmd.version>
         <jdepend.version>2.0</jdepend.version>
