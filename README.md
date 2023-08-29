@@ -29,7 +29,7 @@ Use this maven dependency:
 ```
 
 ## OutputStreams as InputStreams using IOUtil.pipe
-If you have a transformation that you can express with `OutputStream`s then you can apply that transformation *synchronously* to an `InputStream` using this library.
+If you have a transformation that you can express with `OutputStream`s then you can apply that transformation **synchronously** to an `InputStream` using this library.
 
 An example is you want to pass an `InputStream` to a library but you want that `InputStream` to be compressed with *gzip* as well:
 
